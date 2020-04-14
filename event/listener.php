@@ -10,7 +10,7 @@
 
 namespace phpbbstudio\admindashboard\event;
 
-use phpbbstudio\admindashboard\exception\search_data_exception;
+use phpbbstudio\admindashboard\exception\admin_dashboard_exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -29,6 +29,9 @@ class listener implements EventSubscriberInterface
 
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
+	/** @var \phpbbstudio\admindashboard\kasimi */
+	protected $kasimi;
 
 	/** @var \phpbb\language\language */
 	protected $language;
@@ -72,29 +75,31 @@ class listener implements EventSubscriberInterface
 	/**
 	 * Constructor.
 	 *
-	 * @param \phpbb\auth\auth					$auth				Auth object
-	 * @param \phpbb\config\config				$config				Config object
-	 * @param \phpbb\config\db_text				$config_text		Config text object
-	 * @param \phpbb\db\driver\driver_interface	$db					Database object
-	 * @param \phpbb\language\language			$language			Language object
-	 * @param \phpbb\notification\manager		$notifications		Notifications manager object
-	 * @param \phpbb\textformatter\s9e\parser	$parser				Textformatter parser object
-	 * @param \phpbb\textformatter\s9e\renderer	$renderer			Textformatter renderer object
-	 * @param \phpbb\request\request			$request			Request object
-	 * @param \phpbb\template\template			$template			Template object
-	 * @param \phpbb\user						$user				User object
-	 * @param \phpbb\textformatter\s9e\utils	$utils				Textformatter utilities object
-	 * @param string							$table_prefix		Table prefix
-	 * @param string							$admin_path			Admin relative path
-	 * @param string							$root_path			phpBB root path
-	 * @param string							$php_ext			php File extension
-	 * @param array                             $params				Dashboard extension parameters
+	 * @param \phpbb\auth\auth						$auth				Auth object
+	 * @param \phpbb\config\config					$config				Config object
+	 * @param \phpbb\config\db_text					$config_text		Config text object
+	 * @param \phpbb\db\driver\driver_interface		$db					Database object
+	 * @param \phpbbstudio\admindashboard\kasimi	$kasimi				Kasimi the person
+	 * @param \phpbb\language\language				$language			Language object
+	 * @param \phpbb\notification\manager			$notifications		Notifications manager object
+	 * @param \phpbb\textformatter\s9e\parser		$parser				Textformatter parser object
+	 * @param \phpbb\textformatter\s9e\renderer		$renderer			Textformatter renderer object
+	 * @param \phpbb\request\request				$request			Request object
+	 * @param \phpbb\template\template				$template			Template object
+	 * @param \phpbb\user							$user				User object
+	 * @param \phpbb\textformatter\s9e\utils		$utils				Textformatter utilities object
+	 * @param string								$table_prefix		Table prefix
+	 * @param string								$admin_path			Admin relative path
+	 * @param string								$root_path			phpBB root path
+	 * @param string								$php_ext			php File extension
+	 * @param array									$params				Dashboard extension parameters
 	 */
 	public function __construct(
 		\phpbb\auth\auth $auth,
 		\phpbb\config\config $config,
 		\phpbb\config\db_text $config_text,
 		\phpbb\db\driver\driver_interface $db,
+		\phpbbstudio\admindashboard\kasimi $kasimi,
 		\phpbb\language\language $language,
 		\phpbb\notification\manager $notifications,
 		\phpbb\textformatter\s9e\parser $parser,
@@ -114,6 +119,7 @@ class listener implements EventSubscriberInterface
 		$this->config			= $config;
 		$this->config_text		= $config_text;
 		$this->db				= $db;
+		$this->kasimi			= $kasimi;
 		$this->language			= $language;
 		$this->notifications	= $notifications;
 		$this->parser			= $parser;
@@ -151,12 +157,11 @@ class listener implements EventSubscriberInterface
 	 */
 	public function studio_search(\phpbb\event\data $event): void
 	{
-		foreach (debug_backtrace() as $data)
+		if ($this->kasimi->is_happy())
 		{
-			if ($data['class'] === 'phpbbstudio\admindashboard\controller\admin')
-			{
-				throw new search_data_exception($event['display_vars']);
-			}
+			$this->kasimi->set_brain($event['display_vars']);
+
+			throw new admin_dashboard_exception();
 		}
 	}
 

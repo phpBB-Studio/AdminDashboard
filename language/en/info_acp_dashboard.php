@@ -56,7 +56,7 @@ $lang = array_merge($lang, [
 	'STUDIO_DASHBOARD_SIZE'				=> 'Size',
 ]);
 
-if (isset($lang['POWERED_BY']))
+if (isset($lang['POWERED_BY']) && strpos($lang['POWERED_BY'], 'phpBB Studio') === false)
 {
 	$lang['POWERED_BY'] = 'Powered by <a href="https://phpbbstudio.com">Admin dashboard</a> &copy; phpBB Studio<br>' . $lang['POWERED_BY'];
 }

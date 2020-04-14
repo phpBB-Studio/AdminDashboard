@@ -1,10 +1,10 @@
 .rtl #main {
-    float: left;
+	float: left;
 }
 
 .rtl .main {
-    margin-left: 0;
-    margin-right: 210px;
+	margin-left: 0;
+	margin-right: 210px;
 }
 
 .rtl form[id^="action_"][id$="_form"] dt > label {
@@ -12,53 +12,55 @@
 }
 
 .rtl .studio-sidebar {
-    right: 0;
+	right: 0;
 }
 
 .rtl .studio-sidebar-full + .studio-header-fixed {
-    left: 0;
-    margin-left: 0;
-    right: var(--menu-max-width);
-    margin-right: 0;
+	left: 0;
+	margin-left: 0;
+	right: var(--menu-max-width);
+	margin-right: 0;
 }
 
 .rtl .studio-dash-toggle {
-    left: 1px;
-    right: 97%;
+	left: 1px;
+	right: 97%;
 }
 
 .rtl .studio-menu > * {
-    direction: rtl;
-    padding-right: 10px;
+	direction: rtl;
+	padding-right: 10px;
 }
 
 .rtl .studio-sub > a > i {
-    float: right;
+	float: right;
 }
 
 .rtl .studio-cat > a > i:last-child {
-    left: 1rem;
-    right: 90%;
+	left: 1rem;
+	right: 90%;
 }
 
 .rtl .studio-sidebar-full ~ #wrap #page-body {
-    margin-left: 0;
-    margin-right: 50px;
+	margin-left: 0;
+	margin-right: 50px;
 }
 
 .rtl .studio-header-fixed {
-    right: 17px;
+	right: 17px;
 }
 
 .rtl .studio-header {
-    margin-left: 0;
+	margin-left: 0;
 }
 
-.rtl .studio-menu-corner-rounded .studio-sub > a, 
+.rtl .studio-menu-corner-rounded .studio-sub > a,
 .rtl .studio-menu-corner-rounded .studio-item > a {
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-right: 3px;
+	border-radius: 20px 0 0 20px;
+	margin-right: 3px;
+}
+
+.studio-menu-corner-squared .studio-sub > a,
+.studio-menu-corner-squared .studio-item > a {
+	border-radius: 4px 0 0 4px;
 }

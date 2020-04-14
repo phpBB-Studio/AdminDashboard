@@ -31,38 +31,21 @@ parameters:
             - 'black'
 
 services:
+    _defaults:
+        autowire: true
+        bind:
+            $table_prefix: '%core.table_prefix%'
+            $admin_path: '%core.adm_relative_path%'
+            $root_path: '%core.root_path%'
+            $php_ext: '%core.php_ext%'
+            $params: '%phpbbstudio.admindashboard.params%'
+
     phpbbstudio.admindashboard.controller:
         class: phpbbstudio\admindashboard\controller\admin
-        arguments:
-            - '@auth'
-            - '@template_context'
-            - '@dbal.conn'
-            - '@language'
-            - '@path_helper'
-            - '@request'
-            - '@template'
-            - '@user'
-            - '%core.table_prefix%'
-            - '%phpbbstudio.admindashboard.params%'
 
     phpbbstudio.admindashboard.listener:
         class: phpbbstudio\admindashboard\event\listener
         tags: [{ name: event.listener }]
-        arguments:
-            - '@auth'
-            - '@config'
-            - '@config_text'
-            - '@dbal.conn'
-            - '@language'
-            - '@notification_manager'
-            - '@text_formatter.parser'
-            - '@text_formatter.renderer'
-            - '@request'
-            - '@template'
-            - '@user'
-            - '@text_formatter.utils'
-            - '%core.table_prefix%'
-            - '%core.adm_relative_path%'
-            - '%core.root_path%'
-            - '%core.php_ext%'
-            - '%phpbbstudio.admindashboard.params%'
+
+    phpbbstudio.admindashboard.kasimi:
+        class: phpbbstudio\admindashboard\kasimi

@@ -24,6 +24,9 @@ class admin
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
+	/** @var \phpbbstudio\admindashboard\kasimi */
+	protected $kasimi;
+
 	/** @var \phpbb\language\language */
 	protected $language;
 
@@ -57,21 +60,23 @@ class admin
 	/**
 	 * Constructor.
 	 *
-	 * @param \phpbb\auth\auth					$auth			Auth object
-	 * @param \phpbb\template\context			$context		Template context object
-	 * @param \phpbb\db\driver\driver_interface	$db				Database object
-	 * @param \phpbb\language\language			$language		Language object
-	 * @param \phpbb\path_helper				$path_helper	Path helper object
-	 * @param \phpbb\request\request			$request		Request object
-	 * @param \phpbb\template\template			$template		Template object
-	 * @param \phpbb\user						$user			User object
-	 * @param string							$table_prefix	Table prefix
-	 * @param array								$params			Dashboard extension parameters
+	 * @param \phpbb\auth\auth						$auth			Auth object
+	 * @param \phpbb\template\context				$context		Template context object
+	 * @param \phpbb\db\driver\driver_interface		$db				Database object
+	 * @param \phpbbstudio\admindashboard\kasimi	$kasimi			Kasimi the person
+	 * @param \phpbb\language\language				$language		Language object
+	 * @param \phpbb\path_helper					$path_helper	Path helper object
+	 * @param \phpbb\request\request				$request		Request object
+	 * @param \phpbb\template\template				$template		Template object
+	 * @param \phpbb\user							$user			User object
+	 * @param string								$table_prefix	Table prefix
+	 * @param array									$params			Dashboard extension parameters
 	 */
 	public function __construct(
 		\phpbb\auth\auth $auth,
 		\phpbb\template\context $context,
 		\phpbb\db\driver\driver_interface $db,
+		\phpbbstudio\admindashboard\kasimi $kasimi,
 		\phpbb\language\language $language,
 		\phpbb\path_helper $path_helper,
 		\phpbb\request\request $request,
@@ -84,6 +89,7 @@ class admin
 		$this->auth			= $auth;
 		$this->context		= $context;
 		$this->db			= $db;
+		$this->kasimi		= $kasimi;
 		$this->language		= $language;
 		$this->request		= $request;
 		$this->template		= $template;
@@ -135,8 +141,7 @@ class admin
 				$opposite = $this->request->variable('dashboard', '', true);
 				$settings = [
 					'detach_qa', 'display_qa',
-					'display_logs', 'display_users',
-					'display_todo', 'display_notes',
+					'display_logs', 'display_users', 'display_notes',
 					'display_stats', 'remodel_stats',
 				];
 
@@ -418,6 +423,8 @@ class admin
 		$modes = [];
 		$board = new \acp_board();
 
+		$this->kasimi->set_happy(true);
+
 		if ($this->auth->acl_get('a_board'))
 		{
 			$modes += ['settings', 'features', 'avatar', 'message', 'post', 'signature', 'feed', 'registration'];
@@ -434,9 +441,9 @@ class admin
 			{
 				$board->main('', $mode);
 			}
-			catch (\phpbbstudio\admindashboard\exception\search_data_exception $e)
+			catch (\phpbbstudio\admindashboard\exception\admin_dashboard_exception $e)
 			{
-				$data[$mode] = $e->get_data();
+				$data[$mode] = $this->kasimi->get_brain();
 			}
 		}
 
